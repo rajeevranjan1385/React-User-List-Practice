@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Button from "../UI/Button";
 import Card from "../UI/Card";
 import classes from "./AddUser.module.css";
 
@@ -21,15 +22,22 @@ const AddUser = (props) => {
   };
 
   const addUserHandler = (event) => {
-    event.reventDefault();
-    if (username === "" || age === "") {
-      return false;
+    event.preventDefault();
+    if (username.trim().length === 0 || age.trim().length === 0) {
+      return;
+    }
+    if(+age < 1){ //the age is not a number, it is a string as it comes from input field but if we want to cast it to number, we can use + sign
+      return;
     }
     const userInfo = {
       __id: Math.random(),
       username: username,
       age: age,
     };
+
+    console.log(userInfo);
+    setUsername('');
+    setAge('');
   };
 
   return (
@@ -44,7 +52,7 @@ const AddUser = (props) => {
         />
         <label htmlFor="age">Age (Years)</label>
         <input type="number" id="age" value={age} onChange={ageChangeHandler} />
-        <button type="submit">Add User</button>
+        <Button type="submit">Add User</Button>
       </form>
     </Card>
   );
