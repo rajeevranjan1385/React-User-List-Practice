@@ -8,14 +8,28 @@ import classes from "./AddUser.module.css";
 const AddUser = (props) => {
   const usernameInputRef = useRef();
   const ageInputRef = useRef();
+
+  const [username, setUsername] = useState("");
+  const [age, setAge] = useState("");
   const [error, setError] = useState();
+
+  const usernameChangeHandler = (event) => {
+    if (event.target.value === "") {
+      return false;
+    }
+    setUsername(event.target.value);
+  };
+
+  const ageChangeHandler = (event) => {
+    if (event.target.value === "") {
+      return false;
+    }
+    setAge(event.target.value);
+  };
 
   const addUserHandler = (event) => {
     event.preventDefault();
-    const username = usernameInputRef.current.value;
-    const age= ageInputRef.current.value;
-
-    if (username.length === 0 || age.length === 0) {
+    if (username.trim().length === 0 || age.trim().length === 0) {
       setError({
         title: "Invalid Input",
         message: "Please enter a valid name and age (non-empty values)",
@@ -36,8 +50,10 @@ const AddUser = (props) => {
       age: age,
     };
     props.onAddUser(userInfo);
-    usernameInputRef.current.value = '';
-    ageInputRef.current.value = '';
+
+    // console.log(userInfo);
+    setUsername("");
+    setAge("");
   };
 
   const errorHandler = () =>{
@@ -55,12 +71,16 @@ const AddUser = (props) => {
           <input
             type="text"
             id="username"
+            value={username}
+            onChange={usernameChangeHandler}
             ref={usernameInputRef}
           />
           <label htmlFor="age">Age (Years)</label>
           <input
             type="number"
             id="age"
+            value={age}
+            onChange={ageChangeHandler}
             ref={ageInputRef}
           />
           <Button type="submit">Add User</Button>
